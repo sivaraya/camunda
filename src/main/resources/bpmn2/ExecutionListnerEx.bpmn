@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_16mwi21" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="2.0.3">
+  <bpmn:process id="ExecutionListner" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:extensionElements>
+        <camunda:executionListener class="com.avinash.CamundaDemo.listners.ConnectUrlListner" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:outgoing>SequenceFlow_0fukkd4</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="Task_1kcqkpm" name="Save Studnet">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="url">
+            <camunda:script scriptFormat="Groovy">def url=backendUrl+"/saveStudent"
+println url
+url</camunda:script>
+          </camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_0fukkd4</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0yr6s8z</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:sequenceFlow id="SequenceFlow_0fukkd4" sourceRef="StartEvent_1" targetRef="Task_1kcqkpm" />
+    <bpmn:task id="Task_1ja5twv" name="Get Student">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="url">
+            <camunda:script scriptFormat="Groovy">def url=backendUrl+"/getStudent"
+println url
+url</camunda:script>
+          </camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_0yr6s8z</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0xidraj</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:sequenceFlow id="SequenceFlow_0yr6s8z" sourceRef="Task_1kcqkpm" targetRef="Task_1ja5twv" />
+    <bpmn:endEvent id="EndEvent_1dsbrld">
+      <bpmn:incoming>SequenceFlow_0xidraj</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_0xidraj" sourceRef="Task_1ja5twv" targetRef="EndEvent_1dsbrld" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="ExecutionListner">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="263" y="220" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_1kcqkpm_di" bpmnElement="Task_1kcqkpm">
+        <dc:Bounds x="349" y="198" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0fukkd4_di" bpmnElement="SequenceFlow_0fukkd4">
+        <di:waypoint x="299" y="238" />
+        <di:waypoint x="349" y="238" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Task_1ja5twv_di" bpmnElement="Task_1ja5twv">
+        <dc:Bounds x="499" y="198" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0yr6s8z_di" bpmnElement="SequenceFlow_0yr6s8z">
+        <di:waypoint x="449" y="238" />
+        <di:waypoint x="499" y="238" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="EndEvent_1dsbrld_di" bpmnElement="EndEvent_1dsbrld">
+        <dc:Bounds x="649" y="220" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0xidraj_di" bpmnElement="SequenceFlow_0xidraj">
+        <di:waypoint x="599" y="238" />
+        <di:waypoint x="649" y="238" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
