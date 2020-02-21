@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1u4cdi8" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.3.5">
+  <bpmn:process id="Process_1rmuir7" name="Port" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>SequenceFlow_16fmxqa</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_16fmxqa" sourceRef="StartEvent_1" targetRef="Port" />
+    <bpmn:endEvent id="EndEvent_1ojljud">
+      <bpmn:incoming>SequenceFlow_12wxt0x</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_12wxt0x" sourceRef="Port" targetRef="EndEvent_1ojljud" />
+    <bpmn:serviceTask id="Port" name="Port">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="method">POST</camunda:inputParameter>
+            <camunda:inputParameter name="url">
+              <camunda:script scriptFormat="groovy">def url=http://localhost:9090/+"port"
+url</camunda:script>
+            </camunda:inputParameter>
+            <camunda:inputParameter name="payload">
+              <camunda:script scriptFormat="groovy">import groovy.json .*
+
+def offerList=[]
+def siteList=[]
+def jsonSlurper=new JsonSlurper()
+//def DppData=jsonSlurper.parseText(DppData)
+//println DppData
+
+/*println  DppData.solution.externalKey
+println DppData.solution.priceScenarioId
+println DppData.solution.offers[0].containsKey("offerId")
+println DppData.solution.offers[0].site[1].actionType
+println DppData.solution.offers[0].site[1].siteId*/
+def offer=new JsonBuilder()
+//if(DppData.solution.offers[0].containsKey("offerId")) {
+	
+		offer{
+			offerId DppData.solution.offers[0].offerId
+			actionType DppData.solution.offers[0].site[1].actionType
+		}
+	//}
+
+
+//println offer.toPrettyString()
+offerList.add(offer.content)
+
+
+def siteBuild=new JsonBuilder()
+siteBuild{
+siteId DppData.solution.offers[0].site[1].siteId
+countryCode DppData.solution.offers[0].site[1].countryCode
+state DppData.solution.offers[0].site[1].state
+offers offerList
+}
+siteList.add(siteBuild.content)
+
+//println siteBuild.toPrettyString()
+def finalBuild=new JsonBuilder()
+finalBuild{
+	externalKey DppData.solution.externalKey
+	priceScenarioId DppData.solution.priceScenarioId
+	site siteList
+}
+println finalBuild.toPrettyString()
+finalBuild.toString()</camunda:script>
+            </camunda:inputParameter>
+            <camunda:inputParameter name="headers">
+              <camunda:map>
+                <camunda:entry key="Content-Type">application/json</camunda:entry>
+              </camunda:map>
+            </camunda:inputParameter>
+            <camunda:outputParameter name="response">
+              <camunda:script scriptFormat="groovy">println "response is"+response
+response
+</camunda:script>
+            </camunda:outputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>http-connector</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_16fmxqa</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_12wxt0x</bpmn:outgoing>
+    </bpmn:serviceTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1rmuir7">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="99" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_16fmxqa_di" bpmnElement="SequenceFlow_16fmxqa">
+        <di:waypoint x="215" y="117" />
+        <di:waypoint x="270" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="EndEvent_1ojljud_di" bpmnElement="EndEvent_1ojljud">
+        <dc:Bounds x="432" y="99" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_12wxt0x_di" bpmnElement="SequenceFlow_12wxt0x">
+        <di:waypoint x="370" y="117" />
+        <di:waypoint x="432" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_00lsmxe_di" bpmnElement="Port">
+        <dc:Bounds x="270" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

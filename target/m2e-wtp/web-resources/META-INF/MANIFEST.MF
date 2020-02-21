@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Implementation-Title: CamundaDemo
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: S!VaRaYapUReddY
+Implementation-Vendor-Id: com.avinash
+Build-Jdk: 1.8.0_231
+Created-By: Maven Integration for Eclipse
+

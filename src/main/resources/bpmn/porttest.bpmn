@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_110mxjm" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.3.5">
+  <bpmn:process id="porttest" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>SequenceFlow_1327gbz</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_1327gbz" sourceRef="StartEvent_1" targetRef="ExclusiveGateway_0vjzoq7" />
+    <bpmn:serviceTask id="Task_1m7ul4a" name="Port">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="method">POST</camunda:inputParameter>
+            <camunda:inputParameter name="url">http://localhost:9090/port</camunda:inputParameter>
+            <camunda:inputParameter name="payload">
+              <camunda:script scriptFormat="groovy">import groovy.json .*
+
+def offerList=[]
+def siteList=[]
+def jsonSlurper=new JsonSlurper()
+//def DppData=jsonSlurper.parseText(DppData)
+//println DppData
+
+/*println  DppData.solution.externalKey
+println DppData.solution.priceScenarioId
+println DppData.solution.offers[0].containsKey("offerId")
+println DppData.solution.offers[0].site[1].actionType
+println DppData.solution.offers[0].site[1].siteId*/
+def offer=new JsonBuilder()
+//if(DppData.solution.offers[0].containsKey("offerId")) {
+	
+		offer{
+			offerId DppData.solution.offers[0].offerId
+			actionType DppData.solution.offers[0].site[1].actionType
+		}
+	//}
+
+
+//println offer.toPrettyString()
+offerList.add(offer.content)
+
+
+def siteBuild=new JsonBuilder()
+siteBuild{
+siteId DppData.solution.offers[0].site[1].siteId
+countryCode DppData.solution.offers[0].site[1].countryCode
+state DppData.solution.offers[0].site[1].state
+offers offerList
+}
+siteList.add(siteBuild.content)
+
+//println siteBuild.toPrettyString()
+def finalBuild=new JsonBuilder()
+finalBuild{
+	externalKey DppData.solution.externalKey
+	priceScenarioId DppData.solution.priceScenarioId
+	site siteList
+}
+println finalBuild.toPrettyString()
+finalBuild.toString()</camunda:script>
+            </camunda:inputParameter>
+            <camunda:inputParameter name="headers">
+              <camunda:map>
+                <camunda:entry key="Content-Type">application/json</camunda:entry>
+              </camunda:map>
+            </camunda:inputParameter>
+            <camunda:outputParameter name="portResponse">
+              <camunda:script scriptFormat="groovy">println "port response is"+response
+response</camunda:script>
+            </camunda:outputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>http-connector</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_0t8n01s</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0tx7lyp</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="EndEvent_0en8ukp">
+      <bpmn:incoming>SequenceFlow_1bqw896</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_0t8n01s" sourceRef="ExclusiveGateway_0vjzoq7" targetRef="Task_1m7ul4a" />
+    <bpmn:parallelGateway id="ExclusiveGateway_0vjzoq7">
+      <bpmn:incoming>SequenceFlow_1327gbz</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0t8n01s</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_1itcp4o</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:task id="Task_1neuubb">
+      <bpmn:incoming>SequenceFlow_1itcp4o</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1v741hy</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:sequenceFlow id="SequenceFlow_1itcp4o" sourceRef="ExclusiveGateway_0vjzoq7" targetRef="Task_1neuubb" />
+    <bpmn:sequenceFlow id="SequenceFlow_1v741hy" sourceRef="Task_1neuubb" targetRef="ExclusiveGateway_0o2edf4" />
+    <bpmn:sequenceFlow id="SequenceFlow_0tx7lyp" sourceRef="Task_1m7ul4a" targetRef="ExclusiveGateway_0o2edf4" />
+    <bpmn:parallelGateway id="ExclusiveGateway_0o2edf4">
+      <bpmn:incoming>SequenceFlow_1v741hy</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_0tx7lyp</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1kzkhpm</bpmn:outgoing>
+    </bpmn:parallelGateway>
+    <bpmn:sequenceFlow id="SequenceFlow_1kzkhpm" sourceRef="ExclusiveGateway_0o2edf4" targetRef="Task_1gtyyqp" />
+    <bpmn:sequenceFlow id="SequenceFlow_1bqw896" sourceRef="Task_1gtyyqp" targetRef="EndEvent_0en8ukp" />
+    <bpmn:scriptTask id="Task_1gtyyqp" name="final Response" scriptFormat="groovy">
+      <bpmn:incoming>SequenceFlow_1kzkhpm</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1bqw896</bpmn:outgoing>
+      <bpmn:script>println "Port Deleted Successfully"</bpmn:script>
+    </bpmn:scriptTask>
+  </bpmn:process>
+  <bpmn:signal id="Signal_02yd3dq" name="Signal_1ik0iht" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="porttest">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="149" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1327gbz_di" bpmnElement="SequenceFlow_1327gbz">
+        <di:waypoint x="215" y="167" />
+        <di:waypoint x="245" y="167" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_1uvuuql_di" bpmnElement="Task_1m7ul4a">
+        <dc:Bounds x="350" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_0en8ukp_di" bpmnElement="EndEvent_0en8ukp">
+        <dc:Bounds x="682" y="162" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0t8n01s_di" bpmnElement="SequenceFlow_0t8n01s">
+        <di:waypoint x="270" y="142" />
+        <di:waypoint x="270" y="120" />
+        <di:waypoint x="350" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ParallelGateway_0gs8br8_di" bpmnElement="ExclusiveGateway_0vjzoq7">
+        <dc:Bounds x="245" y="142" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_1neuubb_di" bpmnElement="Task_1neuubb">
+        <dc:Bounds x="350" y="240" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1itcp4o_di" bpmnElement="SequenceFlow_1itcp4o">
+        <di:waypoint x="270" y="192" />
+        <di:waypoint x="270" y="280" />
+        <di:waypoint x="350" y="280" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1v741hy_di" bpmnElement="SequenceFlow_1v741hy">
+        <di:waypoint x="450" y="280" />
+        <di:waypoint x="490" y="280" />
+        <di:waypoint x="490" y="205" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0tx7lyp_di" bpmnElement="SequenceFlow_0tx7lyp">
+        <di:waypoint x="450" y="120" />
+        <di:waypoint x="490" y="120" />
+        <di:waypoint x="490" y="155" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ParallelGateway_0zyuv24_di" bpmnElement="ExclusiveGateway_0o2edf4">
+        <dc:Bounds x="465" y="155" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1kzkhpm_di" bpmnElement="SequenceFlow_1kzkhpm">
+        <di:waypoint x="515" y="180" />
+        <di:waypoint x="550" y="180" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1bqw896_di" bpmnElement="SequenceFlow_1bqw896">
+        <di:waypoint x="650" y="180" />
+        <di:waypoint x="682" y="180" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ScriptTask_11rbcit_di" bpmnElement="Task_1gtyyqp">
+        <dc:Bounds x="550" y="140" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

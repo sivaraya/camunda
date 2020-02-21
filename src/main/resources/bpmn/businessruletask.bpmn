@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0r5uqml" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.3.5">
+  <bpmn:process id="businessruletask" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>SequenceFlow_0c95xi8</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_0c95xi8" sourceRef="StartEvent_1" targetRef="Task_0ur6f3h" />
+    <bpmn:sequenceFlow id="SequenceFlow_15cay5f" sourceRef="Task_0ur6f3h" targetRef="Task_1e9o12g" />
+    <bpmn:businessRuleTask id="Task_1e9o12g" name="get first movie" camunda:resultVariable="result" camunda:decisionRef="DirectorsDMN" camunda:mapDecisionResult="singleResult">
+      <bpmn:incoming>SequenceFlow_15cay5f</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0gziao3</bpmn:outgoing>
+    </bpmn:businessRuleTask>
+    <bpmn:sequenceFlow id="SequenceFlow_0gziao3" sourceRef="Task_1e9o12g" targetRef="Task_0b9qza0" />
+    <bpmn:endEvent id="EndEvent_12jmtdo">
+      <bpmn:incoming>SequenceFlow_086aj5a</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_086aj5a" sourceRef="Task_0b9qza0" targetRef="EndEvent_12jmtdo" />
+    <bpmn:userTask id="Task_0ur6f3h" name="first task" camunda:assignee="demo">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="name" label="Director name" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_0c95xi8</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_15cay5f</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_0b9qza0" name="final task" camunda:assignee="demo">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="first" label="first movie" type="string" defaultValue="${result.first}" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_0gziao3</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_086aj5a</bpmn:outgoing>
+    </bpmn:userTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="businessruletask">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0c95xi8_di" bpmnElement="SequenceFlow_0c95xi8">
+        <di:waypoint x="215" y="120" />
+        <di:waypoint x="270" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_15cay5f_di" bpmnElement="SequenceFlow_15cay5f">
+        <di:waypoint x="370" y="120" />
+        <di:waypoint x="430" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="BusinessRuleTask_1gikvo7_di" bpmnElement="Task_1e9o12g">
+        <dc:Bounds x="430" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0gziao3_di" bpmnElement="SequenceFlow_0gziao3">
+        <di:waypoint x="530" y="120" />
+        <di:waypoint x="590" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="EndEvent_12jmtdo_di" bpmnElement="EndEvent_12jmtdo">
+        <dc:Bounds x="752" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_086aj5a_di" bpmnElement="SequenceFlow_086aj5a">
+        <di:waypoint x="690" y="120" />
+        <di:waypoint x="752" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="UserTask_070z6f2_di" bpmnElement="Task_0ur6f3h">
+        <dc:Bounds x="270" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UserTask_1dw03x7_di" bpmnElement="Task_0b9qza0">
+        <dc:Bounds x="590" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

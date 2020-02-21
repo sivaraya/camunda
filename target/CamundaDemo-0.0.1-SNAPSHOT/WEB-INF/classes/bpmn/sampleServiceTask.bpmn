@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0fp7idi" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.3.5">
+  <bpmn:process id="sampleServiceTask" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1k48bh9">
+      <bpmn:extensionElements>
+        <camunda:executionListener class="com.avinash.CamundaDemo.ConnectionEsb" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:outgoing>SequenceFlow_1m6vrxo</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_1m6vrxo" sourceRef="StartEvent_1k48bh9" targetRef="Task_1h7ayzl" />
+    <bpmn:endEvent id="EndEvent_01sm9ca">
+      <bpmn:incoming>SequenceFlow_0d2rubs</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_0d2rubs" sourceRef="Task_0oxy08u" targetRef="EndEvent_01sm9ca" />
+    <bpmn:serviceTask id="Task_0oxy08u" name="Service task">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="method">POST</camunda:inputParameter>
+            <camunda:inputParameter name="url">
+              <camunda:script scriptFormat="groovy">def url=urlid+"save"
+println "URL is :: "+url
+url</camunda:script>
+            </camunda:inputParameter>
+            <camunda:inputParameter name="payload">
+              <camunda:script scriptFormat="groovy">import groovy.json .*
+def pro=properties
+println properties
+def jsonBuilder=new JsonBuilder()
+jsonBuilder{
+name pro.name
+course pro.course
+courseType pro.courseType
+}
+println jsonBuilder.toPretty
+jsonBuilder.toString()</camunda:script>
+            </camunda:inputParameter>
+            <camunda:inputParameter name="headers">
+              <camunda:map>
+                <camunda:entry key="Content-Type">application/json</camunda:entry>
+              </camunda:map>
+            </camunda:inputParameter>
+            <camunda:outputParameter name="response">
+              <camunda:script scriptFormat="groovy">println "output is ::"+response
+response</camunda:script>
+            </camunda:outputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>http-connector</camunda:connectorId>
+        </camunda:connector>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_0inw0jp</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0d2rubs</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="SequenceFlow_0inw0jp" sourceRef="Task_1h7ayzl" targetRef="Task_0oxy08u" />
+    <bpmn:userTask id="Task_1h7ayzl" name="Manager Approve" camunda:assignee="demo">
+      <bpmn:extensionElements>
+        <camunda:executionListener class="" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_1m6vrxo</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0inw0jp</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:boundaryEvent id="BoundaryEvent_1y1rjze" attachedToRef="Task_1h7ayzl">
+      <bpmn:compensateEventDefinition />
+    </bpmn:boundaryEvent>
+    <bpmn:userTask id="Task_093losz" name="Sr Manager" isForCompensation="true" camunda:assignee="demo">
+      <bpmn:extensionElements>
+        <camunda:taskListener class="" event="create" />
+      </bpmn:extensionElements>
+    </bpmn:userTask>
+    <bpmn:subProcess id="Task_0jhqrxn" triggeredByEvent="true">
+      <bpmn:startEvent id="StartEvent_0wylkag">
+        <bpmn:outgoing>SequenceFlow_0bbirnv</bpmn:outgoing>
+        <bpmn:errorEventDefinition errorRef="Error_1dyl3un" />
+      </bpmn:startEvent>
+      <bpmn:sequenceFlow id="SequenceFlow_0bbirnv" sourceRef="StartEvent_0wylkag" targetRef="IntermediateThrowEvent_08obl6u" />
+      <bpmn:intermediateThrowEvent id="IntermediateThrowEvent_08obl6u">
+        <bpmn:incoming>SequenceFlow_0bbirnv</bpmn:incoming>
+        <bpmn:outgoing>SequenceFlow_1ixuy4e</bpmn:outgoing>
+        <bpmn:compensateEventDefinition />
+      </bpmn:intermediateThrowEvent>
+      <bpmn:sequenceFlow id="SequenceFlow_1ixuy4e" sourceRef="IntermediateThrowEvent_08obl6u" targetRef="Task_11zf1k0" />
+      <bpmn:endEvent id="EndEvent_1cs4nk2">
+        <bpmn:incoming>SequenceFlow_00vkm4j</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="SequenceFlow_00vkm4j" sourceRef="Task_11zf1k0" targetRef="EndEvent_1cs4nk2" />
+      <bpmn:userTask id="Task_11zf1k0" name="rollback successfully completed" camunda:assignee="demo">
+        <bpmn:incoming>SequenceFlow_1ixuy4e</bpmn:incoming>
+        <bpmn:outgoing>SequenceFlow_00vkm4j</bpmn:outgoing>
+      </bpmn:userTask>
+    </bpmn:subProcess>
+    <bpmn:association id="Association_053ytvi" associationDirection="One" sourceRef="BoundaryEvent_1y1rjze" targetRef="Task_093losz" />
+  </bpmn:process>
+  <bpmn:error id="Error_1dyl3un" name="Error_34qslir" errorCode="java.lang.Exception" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="sampleServiceTask">
+      <bpmndi:BPMNShape id="StartEvent_1k48bh9_di" bpmnElement="StartEvent_1k48bh9">
+        <dc:Bounds x="152" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1m6vrxo_di" bpmnElement="SequenceFlow_1m6vrxo">
+        <di:waypoint x="188" y="120" />
+        <di:waypoint x="210" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="EndEvent_01sm9ca_di" bpmnElement="EndEvent_01sm9ca">
+        <dc:Bounds x="612" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0d2rubs_di" bpmnElement="SequenceFlow_0d2rubs">
+        <di:waypoint x="450" y="120" />
+        <di:waypoint x="612" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_07uqp31_di" bpmnElement="Task_0oxy08u">
+        <dc:Bounds x="350" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0inw0jp_di" bpmnElement="SequenceFlow_0inw0jp">
+        <di:waypoint x="310" y="120" />
+        <di:waypoint x="350" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="UserTask_0gpfnmu_di" bpmnElement="Task_1h7ayzl">
+        <dc:Bounds x="210" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BoundaryEvent_1ofnfq6_di" bpmnElement="BoundaryEvent_1y1rjze">
+        <dc:Bounds x="242" y="142" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_053ytvi_di" bpmnElement="Association_053ytvi">
+        <di:waypoint x="260" y="178" />
+        <di:waypoint x="260" y="240" />
+        <di:waypoint x="330" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="UserTask_1yseuwf_di" bpmnElement="Task_093losz">
+        <dc:Bounds x="330" y="200" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SubProcess_0mmtslo_di" bpmnElement="Task_0jhqrxn" isExpanded="true">
+        <dc:Bounds x="560" y="250" width="530" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="StartEvent_1rl3vu6_di" bpmnElement="StartEvent_0wylkag">
+        <dc:Bounds x="600" y="332" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0bbirnv_di" bpmnElement="SequenceFlow_0bbirnv">
+        <di:waypoint x="636" y="350" />
+        <di:waypoint x="692" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="IntermediateThrowEvent_1b2ljog_di" bpmnElement="IntermediateThrowEvent_08obl6u">
+        <dc:Bounds x="692" y="332" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1ixuy4e_di" bpmnElement="SequenceFlow_1ixuy4e">
+        <di:waypoint x="728" y="350" />
+        <di:waypoint x="790" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="EndEvent_1cs4nk2_di" bpmnElement="EndEvent_1cs4nk2">
+        <dc:Bounds x="952" y="332" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_00vkm4j_di" bpmnElement="SequenceFlow_00vkm4j">
+        <di:waypoint x="890" y="350" />
+        <di:waypoint x="952" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="UserTask_0edftq7_di" bpmnElement="Task_11zf1k0">
+        <dc:Bounds x="790" y="310" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
