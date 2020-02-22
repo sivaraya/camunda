@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_1xhumf5" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="2.0.3">
+  <bpmn:process id="ExternalClassConnectionEx" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>SequenceFlow_0ftb4m8</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_0ftb4m8" sourceRef="StartEvent_1" targetRef="Task_0cykfff" />
+    <bpmn:sequenceFlow id="SequenceFlow_0n6b2wq" sourceRef="Task_0cykfff" targetRef="Task_1ncpx6w" />
+    <bpmn:endEvent id="EndEvent_15du58i">
+      <bpmn:incoming>SequenceFlow_0sdn28i</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:task id="Task_0cykfff" name="Task1">
+      <bpmn:extensionElements>
+        <camunda:executionListener class="com.avinash.CamundaDemo.listners.LoggerListner" event="start" />
+        <camunda:executionListener class="com.avinash.CamundaDemo.listners.LoggerListner" event="end" />
+        <camunda:inputOutput>
+          <camunda:inputParameter name="statusCode">200</camunda:inputParameter>
+          <camunda:inputParameter name="response">Success</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_0ftb4m8</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0n6b2wq</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_1ncpx6w" name="Task2">
+      <bpmn:extensionElements>
+        <camunda:executionListener class="com.avinash.CamundaDemo.listners.LoggerListner" event="start" />
+        <camunda:executionListener class="com.avinash.CamundaDemo.listners.LoggerListner" event="end" />
+        <camunda:inputOutput>
+          <camunda:inputParameter name="statusCode">200</camunda:inputParameter>
+          <camunda:inputParameter name="response">Success</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_0n6b2wq</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_17f3nuc</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_1bm4ypv" name="Task3">
+      <bpmn:extensionElements>
+        <camunda:executionListener class="com.avinash.CamundaDemo.listners.LoggerListner" event="start" />
+        <camunda:executionListener class="com.avinash.CamundaDemo.listners.LoggerListner" event="end" />
+        <camunda:inputOutput>
+          <camunda:inputParameter name="statusCode">200</camunda:inputParameter>
+          <camunda:inputParameter name="response">Success</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_17f3nuc</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0ilybtb</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="Task_0j0nhv8" name="Task4">
+      <bpmn:extensionElements>
+        <camunda:executionListener class="com.avinash.CamundaDemo.listners.LoggerListner" event="start" />
+        <camunda:executionListener class="com.avinash.CamundaDemo.listners.LoggerListner" event="end" />
+        <camunda:inputOutput>
+          <camunda:inputParameter name="statusCode">200</camunda:inputParameter>
+          <camunda:inputParameter name="response">Success</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_0ilybtb</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0sdn28i</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:sequenceFlow id="SequenceFlow_17f3nuc" sourceRef="Task_1ncpx6w" targetRef="Task_1bm4ypv" />
+    <bpmn:sequenceFlow id="SequenceFlow_0ilybtb" sourceRef="Task_1bm4ypv" targetRef="Task_0j0nhv8" />
+    <bpmn:sequenceFlow id="SequenceFlow_0sdn28i" sourceRef="Task_0j0nhv8" targetRef="EndEvent_15du58i" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="ExternalClassConnectionEx">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="196" y="219" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0ftb4m8_di" bpmnElement="SequenceFlow_0ftb4m8">
+        <di:waypoint x="232" y="237" />
+        <di:waypoint x="259" y="237" />
+        <di:waypoint x="259" y="236" />
+        <di:waypoint x="285" y="236" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0n6b2wq_di" bpmnElement="SequenceFlow_0n6b2wq">
+        <di:waypoint x="385" y="236" />
+        <di:waypoint x="404" y="236" />
+        <di:waypoint x="404" y="237" />
+        <di:waypoint x="423" y="237" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="EndEvent_15du58i_di" bpmnElement="EndEvent_15du58i">
+        <dc:Bounds x="882" y="219" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_1vas5p0_di" bpmnElement="Task_0cykfff">
+        <dc:Bounds x="285" y="196" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_1ncpx6w_di" bpmnElement="Task_1ncpx6w">
+        <dc:Bounds x="423" y="197" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_1bm4ypv_di" bpmnElement="Task_1bm4ypv">
+        <dc:Bounds x="581" y="197" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_0j0nhv8_di" bpmnElement="Task_0j0nhv8">
+        <dc:Bounds x="732" y="197" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_17f3nuc_di" bpmnElement="SequenceFlow_17f3nuc">
+        <di:waypoint x="523" y="237" />
+        <di:waypoint x="581" y="237" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0ilybtb_di" bpmnElement="SequenceFlow_0ilybtb">
+        <di:waypoint x="681" y="237" />
+        <di:waypoint x="732" y="237" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0sdn28i_di" bpmnElement="SequenceFlow_0sdn28i">
+        <di:waypoint x="832" y="237" />
+        <di:waypoint x="882" y="237" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
